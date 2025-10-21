@@ -1,0 +1,122 @@
+﻿<Window x:Class="WpfApp89.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp89"
+        mc:Ignorable="d"
+        Title="Лабораторна робота 8,9" Height="450" Width="800">
+    <Grid>
+        <!-- Елемент для анімації рамки -->
+        <Border x:Name="AnimatedBorder"
+                Width="200" 
+                Height="100" 
+                BorderThickness="5" 
+                CornerRadius="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="0,50,0,0">
+            <Border.BorderBrush>
+                <SolidColorBrush x:Name="BorderBrushRef" Color="DarkBlue"/>
+            </Border.BorderBrush>
+            <TextBlock Text="Наведи на мене!" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center"
+                       FontSize="16"/>
+
+            <!-- Тригер, який реагує на наведення миші -->
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Border.MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <!-- Анімація кольору рамки до червоного -->
+                            <ColorAnimation
+                                Storyboard.TargetName="BorderBrushRef"
+                                Storyboard.TargetProperty="Color"
+                                To="Red"
+                                Duration="0:0:0.3"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="Border.MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <!-- Анімація повернення до початкового кольору -->
+                            <ColorAnimation
+                                Storyboard.TargetName="BorderBrushRef"
+                                Storyboard.TargetProperty="Color"
+                                To="DarkBlue"
+                                Duration="0:0:0.5"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+        </Border>
+
+        <Border x:Name="HolographicElement"
+        Width="150" 
+        Height="150"
+        Background="{DynamicResource HoloBrush}"
+        CornerRadius="75"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Top"
+        Margin="0,228,0,0"
+        RenderTransformOrigin="0.5, 0.5">
+
+            <Border.Resources>
+                <!-- Оголошуємо кисть як ресурс -->
+                <SolidColorBrush x:Key="HoloBrush" Color="Purple"/>
+
+                <Storyboard x:Key="HolographicAnimation" RepeatBehavior="Forever">
+                    <!-- Анімація руху -->
+                    <DoubleAnimationUsingKeyFrames
+                Storyboard.TargetName="HoloTranslate"
+                Storyboard.TargetProperty="Y"
+                Duration="0:0:2" AutoReverse="True">
+                        <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                        <LinearDoubleKeyFrame KeyTime="0:0:1" Value="-15"/>
+                    </DoubleAnimationUsingKeyFrames>
+
+                    <!-- Анімація кольору - звертаємось до ресурсу -->
+                    <ColorAnimationUsingKeyFrames 
+                Storyboard.TargetName="HolographicElement"
+                Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"
+                Duration="0:0:4" AutoReverse="True">
+                        <LinearColorKeyFrame KeyTime="0:0:0" Value="Purple"/>
+                        <LinearColorKeyFrame KeyTime="0:0:1" Value="Blue"/>
+                        <LinearColorKeyFrame KeyTime="0:0:2" Value="Cyan"/>
+                        <LinearColorKeyFrame KeyTime="0:0:3" Value="BlueViolet"/>
+                    </ColorAnimationUsingKeyFrames>
+
+                    <!-- Анімація непрозорості -->
+                    <DoubleAnimationUsingKeyFrames
+                Storyboard.TargetName="HolographicElement"
+                Storyboard.TargetProperty="Opacity"
+                Duration="0:0:1.5" AutoReverse="True">
+                        <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0.8"/>
+                        <LinearDoubleKeyFrame KeyTime="0:0:0.75" Value="1"/>
+                    </DoubleAnimationUsingKeyFrames>
+                </Storyboard>
+            </Border.Resources>
+
+            <!-- Transform для анімації руху -->
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <TranslateTransform x:Name="HoloTranslate" X="0" Y="0"/>
+                </TransformGroup>
+            </Border.RenderTransform>
+
+            <TextBlock Text="Голограмма" 
+               HorizontalAlignment="Center" 
+               VerticalAlignment="Center"
+               Foreground="White"
+               FontWeight="Bold"/>
+
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Border.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource HolographicAnimation}"/>
+                </EventTrigger>
+            </Border.Triggers>
+        </Border>
+    </Grid>
+</Window>
